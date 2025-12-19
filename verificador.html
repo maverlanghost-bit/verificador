@@ -49,6 +49,7 @@
             <button id="login-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition transform active:scale-95">
                 Entrar al Sistema
             </button>
+            <p id="error-msg" class="text-red-400 text-xs text-center mt-4 hidden-forcibly"></p>
         </div>
     </div>
 
@@ -201,6 +202,7 @@
         const dashboardView = document.getElementById('dashboard-view');
         const usernameInput = document.getElementById('username-input');
         const displayUsername = document.getElementById('display-username');
+        const errorMsg = document.getElementById('error-msg');
         
         // Elementos de Estado
         const statusCard = document.getElementById('status-card');
@@ -363,6 +365,7 @@
             const val = usernameInput.value.trim();
             if(!val) return alert("Escribe un nombre");
             username = val;
+            errorMsg.classList.add('hidden-forcibly');
             
             // Login Anónimo
             try {
@@ -377,7 +380,16 @@
                 displayUsername.innerText = `Hola, ${username}`;
                 initRealtimeListener();
             } catch (e) {
-                alert("Error login: " + e.message);
+                console.error("Login Error:", e);
+                // Detección específica de error de dominio (Error común en Vercel)
+                if (e.code === 'auth/unauthorized-domain' || e.message.includes('unauthorized-domain')) {
+                    errorMsg.innerText = "ERROR DE CONFIGURACIÓN FIREBASE:\nEl dominio de esta web no está autorizado. Ve a Firebase Console -> Authentication -> Settings -> Authorized Domains y agrega este dominio de Vercel.";
+                    errorMsg.classList.remove('hidden-forcibly');
+                    alert("¡ATENCIÓN! Error de dominio no autorizado.\n\nFirebase ha bloqueado la conexión porque no has autorizado este dominio de Vercel.\n\nVe a Firebase Console -> Authentication -> Settings -> Authorized Domains y agrega la URL de tu proyecto.");
+                } else {
+                    errorMsg.innerText = "Error: " + e.message;
+                    errorMsg.classList.remove('hidden-forcibly');
+                }
             }
         });
 

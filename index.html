@@ -466,7 +466,6 @@
                 
                 if(!rows.length) { setLoading(false); return alert("Archivo vacío"); }
 
-                // Detectar columna de resultado
                 const keys = Object.keys(rows[0]);
                 const resKey = keys.find(k => k.toLowerCase().match(/result|status|verif/));
 
@@ -475,20 +474,22 @@
                     return alert("No encontré columna de 'resultado' o 'status' en el archivo.");
                 }
 
-                // Subir en Batches
-                const batchSize = 450;
+                // Subir en Batches OPTIMIZADO
+                const batchSize = 250; // Reducido de 450 a 250
                 let verifiedInc = 0;
                 
                 for(let i=0; i<rows.length; i+=batchSize) {
-                    setLoading(true, `Subiendo ${i} de ${rows.length}...`);
+                    // Pausa para no congelar el navegador
+                    await new Promise(resolve => setTimeout(resolve, 100));
+                    
+                    setLoading(true, `Subiendo ${i} de ${rows.length} (${Math.round((i/rows.length)*100)}%)...`);
                     const chunk = rows.slice(i, i+batchSize);
                     const batch = writeBatch(db);
                     
                     chunk.forEach(row => {
-                        const email = row.email || row.Email; // Flexibilidad
+                        const email = row.email || row.Email;
                         const res = row[resKey];
                         if(email && res) {
-                            // ID encodeado
                             const docId = btoa(email).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
                             const ref = doc(db, COLLECTION_PATH, docId);
                             batch.update(ref, {
@@ -527,7 +528,8 @@
 
             try {
                 const rows = await parseFile(file);
-                const batchSize = 450;
+                // Tamaño de batch reducido y pausas para 64k+ registros
+                const batchSize = 250; 
                 
                 // Reset State
                 await setDoc(doc(db, SYSTEM_PATH, 'state'), {
@@ -535,7 +537,10 @@
                 });
 
                 for(let i=0; i<rows.length; i+=batchSize) {
-                    setLoading(true, `Insertando ${i} / ${rows.length}...`);
+                    // Pausa explícita de 100ms para liberar el hilo principal del navegador
+                    await new Promise(resolve => setTimeout(resolve, 100));
+
+                    setLoading(true, `Insertando ${i} de ${rows.length} (${Math.round((i/rows.length)*100)}%)...`);
                     const chunk = rows.slice(i, i+batchSize);
                     const batch = writeBatch(db);
                     chunk.forEach(row => {

@@ -3,462 +3,171 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Central de Verificación</title>
-    <!-- Tailwind CSS -->
+    <title>Limpiador de Listas Pro</title>
     <script src="https://cdn.tailwindcss.com"></script>
-    <!-- PapaParse (CSV) -->
     <script src="https://cdnjs.cloudflare.com/ajax/libs/PapaParse/5.4.1/papaparse.min.js"></script>
-    <!-- SheetJS (Excel) -->
     <script src="https://cdn.sheetjs.com/xlsx-0.20.1/package/dist/xlsx.full.min.js"></script>
-    
-    <script>
-        tailwind.config = {
-            theme: {
-                extend: {
-                    colors: {
-                        slate: { 850: '#1e293b', 950: '#020617' }
-                    }
-                }
-            }
-        }
-    </script>
-    <style>
-        .fade-in { animation: fadeIn 0.3s ease-in-out; }
-        @keyframes fadeIn { from { opacity: 0; } to { opacity: 1; } }
-        .hidden-forcibly { display: none !important; }
-    </style>
 </head>
-<body class="bg-slate-950 text-slate-200 font-sans min-h-screen flex flex-col">
+<body class="bg-gray-900 text-gray-200 min-h-screen flex items-center justify-center p-6 font-sans">
 
-    <!-- VISTA DE LOGIN -->
-    <div id="login-view" class="flex-grow flex items-center justify-center p-4">
-        <div class="bg-slate-800 p-8 rounded-xl shadow-2xl max-w-md w-full border border-slate-700 fade-in">
-            <div class="flex justify-center mb-6">
-                <div class="bg-blue-600 p-3 rounded-full">
-                    <svg class="w-8 h-8 text-white" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
-                </div>
-            </div>
-            <h1 class="text-2xl font-bold text-center mb-2">Central de Verificación</h1>
-            <p class="text-slate-400 text-center mb-6">Sistema de Consolidación de Emails</p>
-            
-            <input type="text" id="username-input" placeholder="Tu Nombre" 
-                class="w-full bg-slate-700 border border-slate-600 rounded-lg p-3 text-white mb-4 focus:ring-2 focus:ring-blue-500 outline-none transition">
-            
-            <button id="login-btn" class="w-full bg-blue-600 hover:bg-blue-500 text-white font-bold py-3 rounded-lg transition transform active:scale-95">
-                Ingresar
-            </button>
-            <p id="error-msg" class="text-red-400 text-xs text-center mt-4 hidden-forcibly"></p>
-        </div>
-    </div>
-
-    <!-- DASHBOARD PRINCIPAL -->
-    <div id="dashboard-view" class="hidden-forcibly max-w-6xl mx-auto w-full p-4 md:p-8 space-y-6 fade-in">
+    <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full border border-gray-700">
         
-        <!-- HEADER -->
-        <header class="flex flex-col md:flex-row justify-between items-center bg-slate-900 p-6 rounded-2xl shadow-lg border border-slate-800">
-            <div class="flex items-center gap-4 mb-4 md:mb-0">
-                <div class="bg-blue-900/30 p-3 rounded-lg border border-blue-800/50">
-                    <svg class="w-6 h-6 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 11H5m14 0a2 2 0 012 2v6a2 2 0 01-2 2H5a2 2 0 01-2-2v-6a2 2 0 012-2m14 0V9a2 2 0 00-2-2M5 11V9a2 2 0 012-2m0 0V5a2 2 0 012-2h6a2 2 0 012 2v2M7 7h10"></path></svg>
-                </div>
-                <div>
-                    <h1 class="text-xl font-bold text-white">Panel de Consolidación</h1>
-                    <p class="text-slate-400 text-sm">Gestionando Base Maestra</p>
-                </div>
-            </div>
-            <div class="flex items-center gap-3 bg-slate-800 px-4 py-2 rounded-full border border-slate-700">
-                <span id="display-username" class="text-sm font-medium text-emerald-400">Sesión Activa</span>
-            </div>
-        </header>
-
-        <!-- MÉTRICAS -->
-        <div class="grid grid-cols-1 md:grid-cols-3 gap-4">
-            <!-- Total -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                <p class="text-slate-400 text-sm uppercase tracking-wider font-bold">Total Base de Datos</p>
-                <p class="text-4xl font-mono font-bold text-white mt-2" id="total-count">0</p>
-            </div>
-            <!-- Verificados -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-emerald-900/30">
-                <p class="text-emerald-400 text-sm uppercase tracking-wider font-bold">Emails Procesados</p>
-                <p class="text-4xl font-mono font-bold text-white mt-2" id="verified-count">0</p>
-            </div>
-            <!-- Pendientes -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                <p class="text-slate-400 text-sm uppercase tracking-wider font-bold">Pendientes</p>
-                <p class="text-4xl font-mono font-bold text-slate-300 mt-2" id="pending-count">0</p>
-            </div>
+        <div class="text-center mb-8">
+            <h1 class="text-3xl font-bold text-white mb-2">Limpiador de Listas (Deduplicador)</h1>
+            <p class="text-gray-400">Sube tu base original y la lista de emails que quieres eliminar.</p>
         </div>
 
-        <!-- BARRA DE PROGRESO -->
-        <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-            <div class="flex justify-between mb-2 text-sm font-medium">
-                <span class="text-slate-400">Progreso Global</span>
-                <span id="progress-percent-text" class="text-blue-400">0% Completado</span>
-            </div>
-            <div class="w-full bg-slate-700 rounded-full h-4 overflow-hidden">
-                <div id="progress-bar" class="bg-gradient-to-r from-blue-600 to-emerald-400 h-4 rounded-full transition-all duration-500 ease-out" style="width: 0%"></div>
-            </div>
-        </div>
-
-        <!-- SECCIÓN PRINCIPAL: CARGA DE RESULTADOS -->
-        <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-xl">
-            <h2 class="text-2xl font-bold text-white mb-2 flex items-center gap-2">
-                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                Subir Archivos Verificados (Resultados)
-            </h2>
-            <p class="text-slate-400 mb-6">Sube tus archivos Excel o CSV con los resultados de Million Verifier. El sistema actualizará el estado de los correos.</p>
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
             
-            <input type="file" id="upload-input" accept=".csv, .xlsx, .xls" class="hidden">
-            <label for="upload-input" id="upload-zone" class="flex flex-col items-center justify-center w-full h-48 border-2 border-slate-600 border-dashed rounded-xl cursor-pointer bg-slate-900 hover:bg-slate-800 hover:border-blue-500 transition-all group">
-                <div class="flex flex-col items-center justify-center pt-5 pb-6">
-                    <svg class="w-12 h-12 mb-4 text-slate-500 group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                    <p class="mb-2 text-sm text-slate-400"><span class="font-semibold text-white">Clic para subir resultados</span></p>
-                    <p class="text-xs text-slate-500">Soporta Excel y CSV</p>
-                </div>
-            </label>
-        </div>
-
-        <!-- SECCIÓN DE DESCARGAS Y UTILIDADES -->
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
-            
-            <!-- DESCARGAR REPORTES -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-blue-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 10v6m0 0l-3-3m3 3l3-3m2 8H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"></path></svg>
-                    Descargar Reportes
-                </h3>
-                <div class="space-y-3">
-                    <button id="btn-download-full" class="w-full flex items-center justify-between px-4 py-3 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-200 transition group border border-slate-700">
-                        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-slate-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Reporte Completo (Todo)</span>
-                    </button>
-                    <button id="btn-download-clean" class="w-full flex items-center justify-between px-4 py-3 bg-emerald-900/20 hover:bg-emerald-900/40 rounded-lg text-emerald-400 transition border border-emerald-900/30">
-                        <span class="flex items-center gap-2"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Descargar Solo Emails Verificados</span>
-                    </button>
-                </div>
+            <!-- INPUT 1: BASE MAESTRA -->
+            <div class="bg-gray-900 p-4 rounded-xl border border-blue-900/50">
+                <label class="block text-blue-400 font-bold mb-2 text-sm uppercase">1. Base Maestra (Original)</label>
+                <input type="file" id="fileMaster" accept=".csv, .xlsx, .xls" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer"/>
+                <p id="countMaster" class="text-xs text-gray-500 mt-2 font-mono">0 registros</p>
             </div>
 
-            <!-- UTILIDADES / PENDIENTES -->
-            <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
-                <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
-                    <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Gestión de Base Maestra
-                </h3>
-                <div class="space-y-3">
-                    <button id="btn-download-pending" class="w-full flex items-center justify-between px-4 py-3 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 transition border border-slate-700">
-                        <span class="flex items-center gap-2"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg> Descargar Pendientes (Para procesar)</span>
-                    </button>
-                    
-                    <div class="pt-4 mt-2 border-t border-slate-800">
-                         <input type="file" id="initial-upload-input" accept=".csv, .xlsx, .xls" class="hidden">
-                        <label for="initial-upload-input" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-slate-800/50 hover:bg-slate-700 text-xs text-slate-500 hover:text-slate-300 rounded border border-slate-800 cursor-pointer transition text-center">
-                            Subir Nueva Base Maestra (Carga Masiva)
-                        </label>
-                    </div>
-                </div>
+            <!-- INPUT 2: A ELIMINAR -->
+            <div class="bg-gray-900 p-4 rounded-xl border border-red-900/50">
+                <label class="block text-red-400 font-bold mb-2 text-sm uppercase">2. Lista a Eliminar (Ya verificados)</label>
+                <input type="file" id="fileRemove" accept=".csv, .xlsx, .xls" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-600 file:text-white hover:file:bg-red-700 cursor-pointer"/>
+                <p id="countRemove" class="text-xs text-gray-500 mt-2 font-mono">0 registros</p>
             </div>
         </div>
 
-        <!-- MENSAJE DE CARGA MEJORADO -->
-        <div id="loading-msg" class="hidden-forcibly fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center fade-in">
-            <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-slate-700">
-                <div class="relative w-16 h-16">
-                     <div class="absolute inset-0 border-4 border-slate-600 rounded-full"></div>
-                     <div class="absolute inset-0 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
-                </div>
-                <div class="text-center">
-                    <p class="text-white font-bold text-xl mb-1">Trabajando...</p>
-                    <p id="loading-text" class="text-blue-300 text-sm font-mono">Iniciando procesos</p>
-                </div>
-                <!-- Barra de progreso interna -->
-                <div class="w-full bg-slate-700 rounded-full h-2">
-                     <div id="upload-progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-200" style="width: 0%"></div>
-                </div>
+        <button id="btnProcess" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg transition-all text-lg flex justify-center items-center gap-2">
+            <span>Ejecutar Limpieza</span>
+        </button>
+
+        <div id="resultArea" class="hidden mt-6 bg-gray-900 p-4 rounded-xl border border-emerald-500/30">
+            <p class="text-center text-emerald-400 font-bold mb-2">¡Operación Completada!</p>
+            <div class="flex justify-between text-sm text-gray-400 font-mono px-4">
+                <span>Originales: <span id="resTotal" class="text-white">0</span></span>
+                <span>Eliminados: <span id="resDeleted" class="text-red-400">0</span></span>
+                <span>Restantes: <span id="resRemaining" class="text-emerald-400 font-bold">0</span></span>
             </div>
         </div>
 
     </div>
 
-    <!-- LOGICA JAVASCRIPT -->
-    <script type="module">
-        import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-app.js';
-        import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
-        import { getFirestore, collection, doc, onSnapshot, writeBatch, query, where, getDocs, updateDoc, serverTimestamp, setDoc, getDoc, getCountFromServer } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
+    <script>
+        let listMaster = [];
+        let listRemove = [];
+        const btnProcess = document.getElementById('btnProcess');
 
-        const firebaseConfig = {
-            apiKey: "AIzaSyD8LhEUAPs0diKJi2aRYV-Qwtcdr8hd6ao",
-            authDomain: "verificador-c4a60.firebaseapp.com",
-            projectId: "verificador-c4a60",
-            storageBucket: "verificador-c4a60.firebasestorage.app",
-            messagingSenderId: "134491483626",
-            appId: "1:134491483626:web:7eeb7b71667586503ed693"
-        };
-        
-        const app = initializeApp(firebaseConfig);
-        const auth = getAuth(app);
-        const db = getFirestore(app);
-        const COLLECTION_PATH = 'emails';
+        // --- LECTURA DE ARCHIVOS ---
+        document.getElementById('fileMaster').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            document.getElementById('countMaster').innerText = "Leyendo...";
+            listMaster = await parseFile(file);
+            document.getElementById('countMaster').innerText = `${listMaster.length.toLocaleString()} registros cargados`;
+            checkBtn();
+        });
 
-        // Elementos DOM
-        const loginView = document.getElementById('login-view');
-        const dashboardView = document.getElementById('dashboard-view');
-        const usernameInput = document.getElementById('username-input');
-        const errorMsg = document.getElementById('error-msg');
-        const loadingMsg = document.getElementById('loading-msg');
-        const loadingText = document.getElementById('loading-text');
-        const uploadProgressBar = document.getElementById('upload-progress-bar');
+        document.getElementById('fileRemove').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            document.getElementById('countRemove').innerText = "Leyendo...";
+            listRemove = await parseFile(file);
+            document.getElementById('countRemove').innerText = `${listRemove.length.toLocaleString()} registros cargados`;
+            checkBtn();
+        });
 
-        // Contadores
-        const totalCountEl = document.getElementById('total-count');
-        const verifiedCountEl = document.getElementById('verified-count');
-        const pendingCountEl = document.getElementById('pending-count');
-        const progressBar = document.getElementById('progress-bar');
-        const progressText = document.getElementById('progress-percent-text');
+        function checkBtn() {
+            btnProcess.disabled = !(listMaster.length > 0 && listRemove.length > 0);
+        }
 
-        let username = "";
-        let stats = { total: 0, verified: 0 };
+        // --- LÓGICA DE CÓDIGO (LA FUNCIÓN PURA) ---
+        btnProcess.addEventListener('click', () => {
+            btnProcess.innerText = "Procesando...";
+            
+            setTimeout(() => {
+                // 1. Normalizar emails a eliminar (Set para velocidad O(1))
+                // Convertimos a minúsculas y limpiamos espacios para asegurar coincidencias
+                const emailsToDelete = new Set();
+                
+                // Detectar columna de email en lista a borrar
+                const keyRemove = findEmailKey(listRemove[0]);
+                
+                listRemove.forEach(row => {
+                    if(row[keyRemove]) {
+                        // Limpieza agresiva: minúsculas y trim
+                        emailsToDelete.add(String(row[keyRemove]).toLowerCase().trim());
+                    }
+                });
 
-        // --- HELPER: LEER EXCEL/CSV ---
+                // 2. Filtrar lista maestra
+                const keyMaster = findEmailKey(listMaster[0]);
+                const cleanList = [];
+                let deletedCount = 0;
+
+                listMaster.forEach(row => {
+                    const rawEmail = row[keyMaster];
+                    if(!rawEmail) return;
+
+                    const normalizedEmail = String(rawEmail).toLowerCase().trim();
+
+                    // LA FUNCIÓN CORE: Si NO está en el Set, se queda.
+                    if (!emailsToDelete.has(normalizedEmail)) {
+                        cleanList.push(row);
+                    } else {
+                        deletedCount++;
+                    }
+                });
+
+                // 3. Resultado
+                document.getElementById('resTotal').innerText = listMaster.length.toLocaleString();
+                document.getElementById('resDeleted').innerText = deletedCount.toLocaleString();
+                document.getElementById('resRemaining').innerText = cleanList.length.toLocaleString();
+                document.getElementById('resultArea').classList.remove('hidden');
+                
+                downloadCSV(cleanList);
+                btnProcess.innerText = "Ejecutar Limpieza";
+
+            }, 100);
+        });
+
+        // --- HELPERS ---
         const parseFile = (file) => {
             return new Promise((resolve, reject) => {
                 const isExcel = file.name.endsWith('.xlsx') || file.name.endsWith('.xls');
                 if (isExcel) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        try {
-                            const data = new Uint8Array(e.target.result);
-                            const workbook = XLSX.read(data, { type: 'array' });
-                            const firstSheetName = workbook.SheetNames[0];
-                            const json = XLSX.utils.sheet_to_json(workbook.Sheets[firstSheetName], { defval: "" });
-                            resolve(json);
-                        } catch (err) { reject(err); }
+                        const data = new Uint8Array(e.target.result);
+                        const workbook = XLSX.read(data, { type: 'array' });
+                        const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
+                        resolve(json);
                     };
                     reader.readAsArrayBuffer(file);
                 } else {
                     Papa.parse(file, {
                         header: true, skipEmptyLines: true,
-                        complete: (results) => resolve(results.data),
-                        error: (err) => reject(err)
+                        complete: (res) => resolve(res.data),
+                        error: reject
                     });
                 }
             });
         };
 
-        function setLoading(loading, text = "Cargando...", percent = 0) {
-            if (loading) {
-                loadingMsg.classList.remove('hidden-forcibly');
-                loadingText.innerText = text;
-                uploadProgressBar.style.width = `${percent}%`;
-            } else {
-                loadingMsg.classList.add('hidden-forcibly');
-            }
-        }
+        const findEmailKey = (row) => {
+            if(!row) return null;
+            const keys = Object.keys(row);
+            // Busca columnas que parezcan emails
+            return keys.find(k => k.toLowerCase().match(/email|correo|mail/)) || keys[0];
+        };
 
-        async function refreshStats() {
-            try {
-                const coll = collection(db, COLLECTION_PATH);
-                const snapTotal = await getCountFromServer(query(coll));
-                const total = snapTotal.data().count;
-                const snapVerified = await getCountFromServer(query(coll, where("status", "==", "verified")));
-                const verified = snapVerified.data().count;
-
-                stats = { total, verified };
-                updateUIStats();
-            } catch (e) { console.error("Error stats", e); }
-        }
-
-        function updateUIStats() {
-            totalCountEl.innerText = stats.total.toLocaleString();
-            verifiedCountEl.innerText = stats.verified.toLocaleString();
-            pendingCountEl.innerText = (stats.total - stats.verified).toLocaleString();
-            
-            const percent = stats.total > 0 ? ((stats.verified / stats.total) * 100).toFixed(1) : 0;
-            progressBar.style.width = `${percent}%`;
-            progressText.innerText = `${percent}% Completado`;
-        }
-
-        // --- LOGIN ---
-        document.getElementById('login-btn').addEventListener('click', async () => {
-            username = usernameInput.value.trim() || "Admin";
-            errorMsg.classList.add('hidden-forcibly');
-            try {
-                if (typeof __initial_auth_token !== 'undefined' && __initial_auth_token) {
-                    await signInWithCustomToken(auth, __initial_auth_token);
-                } else {
-                    await signInAnonymously(auth);
-                }
-                loginView.classList.add('hidden-forcibly');
-                dashboardView.classList.remove('hidden-forcibly');
-                refreshStats();
-                setInterval(refreshStats, 30000);
-            } catch (e) {
-                if (e.code === 'auth/unauthorized-domain' || e.message.includes('unauthorized-domain')) {
-                    alert("ERROR DE DOMINIO: Debes autorizar este dominio en Firebase Console.");
-                } else {
-                    errorMsg.innerText = e.message;
-                    errorMsg.classList.remove('hidden-forcibly');
-                }
-            }
-        });
-
-        // --- CARGA INICIAL (BASE MAESTRA 63k+) ---
-        document.getElementById('initial-upload-input').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            
-            if(!confirm("¿Estás seguro? Esto cargará nuevos correos a la base de datos.")) return;
-
-            setLoading(true, "Analizando archivo...", 0);
-            try {
-                const rows = await parseFile(file);
-                const batchSize = 400; // Lotes de 400
-                
-                for(let i=0; i<rows.length; i+=batchSize) {
-                    // PAUSA CRÍTICA para que el navegador respire
-                    await new Promise(r => setTimeout(r, 100));
-
-                    const progress = Math.round((i / rows.length) * 100);
-                    setLoading(true, `Subiendo ${i} de ${rows.length}...`, progress);
-                    
-                    const chunk = rows.slice(i, i+batchSize);
-                    const batch = writeBatch(db);
-                    
-                    chunk.forEach(row => {
-                        const email = row.email || row.Email || row.EMAIL;
-                        if(email) {
-                            const docId = btoa(email).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
-                            // Set merge:true para no sobrescribir si ya existe
-                            const ref = doc(db, COLLECTION_PATH, docId);
-                            batch.set(ref, {
-                                email: email, 
-                                status: 'pending', // Por defecto pendiente si es nuevo
-                                result: null
-                            }, { merge: true }); 
-                        }
-                    });
-                    await batch.commit();
-                }
-                alert("Base maestra cargada exitosamente.");
-                refreshStats();
-            } catch(err) { alert("Error: " + err.message); }
-            setLoading(false);
-        });
-
-        // --- SUBIR RESULTADOS ---
-        document.getElementById('upload-input').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            
-            setLoading(true, "Leyendo resultados...", 0);
-            
-            try {
-                const rows = await parseFile(file);
-                if(!rows.length) { setLoading(false); return alert("Archivo vacío"); }
-
-                const keys = Object.keys(rows[0]);
-                const resKey = keys.find(k => k.toLowerCase().match(/result|status|verif/));
-
-                if(!resKey) {
-                    setLoading(false); 
-                    return alert("No encontré columna de resultado.");
-                }
-
-                const batchSize = 400;
-                
-                for(let i=0; i<rows.length; i+=batchSize) {
-                    await new Promise(r => setTimeout(r, 100));
-                    
-                    const progress = Math.round((i / rows.length) * 100);
-                    setLoading(true, `Actualizando ${i} de ${rows.length}...`, progress);
-                    
-                    const chunk = rows.slice(i, i+batchSize);
-                    const batch = writeBatch(db);
-                    
-                    chunk.forEach(row => {
-                        const email = row.email || row.Email || row.EMAIL;
-                        const res = row[resKey];
-                        if(email) {
-                            const docId = btoa(email).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
-                            const ref = doc(db, COLLECTION_PATH, docId);
-                            batch.set(ref, {
-                                email: email,
-                                status: 'verified',
-                                result: res || "Procesado",
-                                verifiedAt: serverTimestamp()
-                            }, { merge: true });
-                        }
-                    });
-
-                    await batch.commit();
-                }
-
-                alert("Resultados actualizados.");
-                document.getElementById('upload-input').value = "";
-                refreshStats();
-
-            } catch (err) {
-                alert("Error: " + err.message);
-            }
-            setLoading(false);
-        });
-
-        // --- DESCARGAS ---
-        document.getElementById('btn-download-full').addEventListener('click', async () => {
-            setLoading(true, "Generando reporte...", 100);
-            try {
-                const q = query(collection(db, COLLECTION_PATH));
-                const snap = await getDocs(q); // Cuidado: Descargar 60k docs consume ancho de banda
-                const data = [];
-                snap.forEach(d => {
-                    const r = d.data();
-                    data.push({ email: r.email, estado: r.status, resultado: r.result || "" });
-                });
-                if(data.length) downloadCSV(data, "BASE_COMPLETA.csv");
-                else alert("Base vacía.");
-            } catch(e) { console.error(e); alert("Error descargando"); }
-            setLoading(false);
-        });
-
-        document.getElementById('btn-download-clean').addEventListener('click', async () => {
-            setLoading(true, "Filtrando verificados...", 100);
-            try {
-                const q = query(collection(db, COLLECTION_PATH), where("status", "==", "verified"));
-                const snap = await getDocs(q);
-                const data = [];
-                snap.forEach(d => {
-                     const r = d.data();
-                     data.push({ email: r.email, resultado: r.result }); 
-                });
-                if(data.length) downloadCSV(data, "SOLO_VERIFICADOS.csv");
-                else alert("No hay verificados.");
-            } catch(e) { console.error(e); alert("Error descargando"); }
-            setLoading(false);
-        });
-
-        document.getElementById('btn-download-pending').addEventListener('click', async () => {
-            setLoading(true, "Buscando pendientes...", 100);
-            try {
-                const q = query(collection(db, COLLECTION_PATH), where("status", "==", "pending"));
-                const snap = await getDocs(q);
-                const data = [];
-                snap.forEach(d => data.push({ email: d.data().email }));
-                if(data.length) downloadCSV(data, "PENDIENTES_PARA_PROCESAR.csv");
-                else alert("No quedan pendientes.");
-            } catch(e) { console.error(e); alert("Error descargando"); }
-            setLoading(false);
-        });
-
-        const downloadCSV = (data, filename) => {
+        const downloadCSV = (data) => {
             const csv = Papa.unparse(data);
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = filename;
+            a.download = "LISTA_LIMPIA_FINAL.csv";
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);
         };
-
     </script>
 </body>
 </html>

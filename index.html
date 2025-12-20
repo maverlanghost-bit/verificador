@@ -13,37 +13,80 @@
     <div class="bg-gray-800 p-8 rounded-2xl shadow-2xl max-w-2xl w-full border border-gray-700">
         
         <div class="text-center mb-8">
-            <h1 class="text-3xl font-bold text-white mb-2">Limpiador de Listas (Deduplicador)</h1>
-            <p class="text-gray-400">Sube tu base original y la lista de emails que quieres eliminar.</p>
+            <h1 class="text-3xl font-bold text-white mb-2">Limpiador de Listas (Ciclico)</h1>
+            <p class="text-gray-400">Sube tu base, elimina resultados, y reutiliza lo que queda para seguir limpiando.</p>
         </div>
 
-        <div class="grid grid-cols-1 md:grid-cols-2 gap-6 mb-8">
+        <div class="space-y-6 mb-8">
             
             <!-- INPUT 1: BASE MAESTRA -->
-            <div class="bg-gray-900 p-4 rounded-xl border border-blue-900/50">
-                <label class="block text-blue-400 font-bold mb-2 text-sm uppercase">1. Base Maestra (Original)</label>
-                <input type="file" id="fileMaster" accept=".csv, .xlsx, .xls" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer"/>
-                <p id="countMaster" class="text-xs text-gray-500 mt-2 font-mono">0 registros</p>
+            <div class="bg-gray-900 p-5 rounded-xl border border-blue-900/50 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1 h-full bg-blue-600"></div>
+                <label class="block text-blue-400 font-bold mb-2 text-sm uppercase flex justify-between">
+                    <span>1. Base Maestra (Original)</span>
+                    <span class="text-gray-500 text-xs normal-case">El archivo grande con todo</span>
+                </label>
+                <input type="file" id="fileMaster" accept=".csv, .xlsx, .xls" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-blue-600 file:text-white hover:file:bg-blue-700 cursor-pointer transition-all"/>
+                <p id="countMaster" class="text-xs text-gray-500 mt-2 font-mono pl-1">Esperando archivo...</p>
             </div>
 
-            <!-- INPUT 2: A ELIMINAR -->
-            <div class="bg-gray-900 p-4 rounded-xl border border-red-900/50">
-                <label class="block text-red-400 font-bold mb-2 text-sm uppercase">2. Lista a Eliminar (Ya verificados)</label>
-                <input type="file" id="fileRemove" accept=".csv, .xlsx, .xls" class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-full file:border-0 file:text-sm file:font-semibold file:bg-red-600 file:text-white hover:file:bg-red-700 cursor-pointer"/>
-                <p id="countRemove" class="text-xs text-gray-500 mt-2 font-mono">0 registros</p>
+            <!-- INPUT 2: A ELIMINAR (MULTIPLE) -->
+            <div class="bg-gray-900 p-5 rounded-xl border border-red-900/50 relative overflow-hidden group">
+                <div class="absolute top-0 left-0 w-1 h-full bg-red-600"></div>
+                <label class="block text-red-400 font-bold mb-2 text-sm uppercase flex justify-between">
+                    <span>2. Listas a Eliminar (Resultados)</span>
+                    <span class="text-gray-500 text-xs normal-case">Puedes seleccionar VARIOS archivos</span>
+                </label>
+                <!-- Atributo 'multiple' añadido -->
+                <input type="file" id="fileRemove" accept=".csv, .xlsx, .xls" multiple class="block w-full text-sm text-gray-400 file:mr-4 file:py-2 file:px-4 file:rounded-lg file:border-0 file:text-sm file:font-semibold file:bg-red-600 file:text-white hover:file:bg-red-700 cursor-pointer transition-all"/>
+                <p id="countRemove" class="text-xs text-gray-500 mt-2 font-mono pl-1">Esperando archivos...</p>
             </div>
         </div>
 
-        <button id="btnProcess" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg transition-all text-lg flex justify-center items-center gap-2">
-            <span>Ejecutar Limpieza</span>
+        <button id="btnProcess" disabled class="w-full bg-emerald-600 hover:bg-emerald-500 disabled:bg-gray-700 disabled:cursor-not-allowed text-white font-bold py-4 rounded-xl shadow-lg transition-all text-lg flex justify-center items-center gap-2 transform active:scale-95">
+            <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+            <span>Ejecutar Limpieza y Descargar</span>
         </button>
 
-        <div id="resultArea" class="hidden mt-6 bg-gray-900 p-4 rounded-xl border border-emerald-500/30">
-            <p class="text-center text-emerald-400 font-bold mb-2">¡Operación Completada!</p>
-            <div class="flex justify-between text-sm text-gray-400 font-mono px-4">
-                <span>Originales: <span id="resTotal" class="text-white">0</span></span>
-                <span>Eliminados: <span id="resDeleted" class="text-red-400">0</span></span>
-                <span>Restantes: <span id="resRemaining" class="text-emerald-400 font-bold">0</span></span>
+        <!-- RESULTADOS -->
+        <div id="resultArea" class="hidden mt-6 bg-gray-900 p-6 rounded-xl border border-emerald-500/30 animate-pulse-once">
+            <div class="flex items-center justify-center gap-2 mb-4">
+                <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 12l2 2 4-4m6 2a9 9 0 11-18 0 9 9 0 0118 0z"></path></svg>
+                <p class="text-center text-emerald-400 font-bold text-lg">¡Proceso Terminado!</p>
+            </div>
+            
+            <div class="grid grid-cols-3 gap-4 text-center text-sm font-mono mb-6">
+                <div class="bg-gray-800 p-2 rounded">
+                    <p class="text-gray-500 text-xs uppercase">Original</p>
+                    <span id="resTotal" class="text-white font-bold text-lg">0</span>
+                </div>
+                <div class="bg-red-900/20 p-2 rounded border border-red-900/30">
+                    <p class="text-red-400 text-xs uppercase">Eliminados</p>
+                    <span id="resDeleted" class="text-red-400 font-bold text-lg">0</span>
+                </div>
+                <div class="bg-emerald-900/20 p-2 rounded border border-emerald-900/30">
+                    <p class="text-emerald-400 text-xs uppercase">Restantes</p>
+                    <span id="resRemaining" class="text-emerald-400 font-bold text-lg">0</span>
+                </div>
+            </div>
+
+            <div class="space-y-3">
+                <!-- BOTÓN NUEVO PARA CICLO -->
+                <button id="btnUseRemaining" class="w-full bg-blue-700 hover:bg-blue-600 text-white font-medium py-3 rounded-lg flex justify-center items-center gap-2 transition-colors border border-blue-600 mb-4 shadow-lg shadow-blue-900/20">
+                    <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 4v5h.582m15.356 2A8.001 8.001 0 004.582 9m0 0H9m11 11v-5h-.581m0 0a8.003 8.003 0 01-15.357-2m15.357 2H15"/></svg>
+                    <span>🔄 Usar Restantes como nueva Base Maestra (Seguir limpiando)</span>
+                </button>
+
+                <div class="flex gap-3">
+                    <button id="btnDownloadClean" class="flex-1 bg-emerald-700 hover:bg-emerald-600 text-white font-bold py-3 rounded-lg flex justify-center items-center gap-2 transition-colors">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-4l-4 4m0 0l-4-4m4 4V4"/></svg>
+                        Lista Limpia
+                    </button>
+                    <button id="btnDownloadRemoved" class="flex-1 bg-gray-700 hover:bg-gray-600 text-gray-300 font-medium py-3 rounded-lg flex justify-center items-center gap-2 transition-colors border border-gray-600">
+                        <svg class="w-5 h-5" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 7l-.867 12.142A2 2 0 0116.138 21H7.862a2 2 0 01-1.995-1.858L5 7m5 4v6m4-6v6m1-10V4a1 1 0 00-1-1h-4a1 1 0 00-1 1v3M4 7h16"/></svg>
+                        Eliminados
+                    </button>
+                </div>
             </div>
         </div>
 
@@ -51,80 +94,175 @@
 
     <script>
         let listMaster = [];
-        let listRemove = [];
+        let listRemove = []; // Ahora acumulará múltiples archivos
+        let finalCleanList = [];
+        let finalRemovedList = [];
+        
         const btnProcess = document.getElementById('btnProcess');
+        const resultArea = document.getElementById('resultArea');
+        const btnDownloadClean = document.getElementById('btnDownloadClean');
+        const btnDownloadRemoved = document.getElementById('btnDownloadRemoved');
+        const btnUseRemaining = document.getElementById('btnUseRemaining'); // Nuevo
 
-        // --- LECTURA DE ARCHIVOS ---
+        // --- LECTURA BASE MAESTRA ---
         document.getElementById('fileMaster').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if(!file) return;
-            document.getElementById('countMaster').innerText = "Leyendo...";
-            listMaster = await parseFile(file);
-            document.getElementById('countMaster').innerText = `${listMaster.length.toLocaleString()} registros cargados`;
-            checkBtn();
+            
+            document.getElementById('countMaster').innerText = "Leyendo archivo grande...";
+            document.getElementById('countMaster').classList.add('text-blue-400', 'animate-pulse');
+            
+            try {
+                listMaster = await parseFile(file);
+                document.getElementById('countMaster').innerText = `✅ Cargado: ${listMaster.length.toLocaleString()} filas`;
+                document.getElementById('countMaster').classList.remove('text-blue-400', 'animate-pulse', 'text-gray-500');
+                document.getElementById('countMaster').classList.add('text-green-400');
+                checkBtn();
+            } catch(err) {
+                alert("Error leyendo Master: " + err.message);
+            }
         });
 
+        // --- LECTURA MÚLTIPLE A ELIMINAR ---
         document.getElementById('fileRemove').addEventListener('change', async (e) => {
-            const file = e.target.files[0];
-            if(!file) return;
-            document.getElementById('countRemove').innerText = "Leyendo...";
-            listRemove = await parseFile(file);
-            document.getElementById('countRemove').innerText = `${listRemove.length.toLocaleString()} registros cargados`;
-            checkBtn();
+            const files = Array.from(e.target.files);
+            if(files.length === 0) return;
+
+            document.getElementById('countRemove').innerText = `Leyendo ${files.length} archivos...`;
+            document.getElementById('countRemove').classList.add('text-blue-400', 'animate-pulse');
+
+            listRemove = []; // Reiniciamos la lista de eliminación
+            let totalRows = 0;
+
+            try {
+                // Procesar todos los archivos en paralelo
+                const promises = files.map(file => parseFile(file));
+                const results = await Promise.all(promises);
+
+                // Unir resultados
+                results.forEach(data => {
+                    listRemove = listRemove.concat(data);
+                });
+
+                document.getElementById('countRemove').innerText = `✅ ${files.length} archivos cargados (${listRemove.length.toLocaleString()} filas totales)`;
+                document.getElementById('countRemove').classList.remove('text-blue-400', 'animate-pulse', 'text-gray-500');
+                document.getElementById('countRemove').classList.add('text-green-400');
+                checkBtn();
+            } catch(err) {
+                alert("Error leyendo archivos de limpieza: " + err.message);
+            }
         });
 
         function checkBtn() {
-            btnProcess.disabled = !(listMaster.length > 0 && listRemove.length > 0);
+            // Habilitar si ambos tienen datos
+            if (listMaster.length > 0 && listRemove.length > 0) {
+                btnProcess.disabled = false;
+                btnProcess.classList.remove('bg-gray-600');
+                btnProcess.classList.add('bg-emerald-600', 'hover:bg-emerald-500');
+                btnProcess.innerHTML = `
+                    <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 14l-7 7m0 0l-7-7m7 7V3"></path></svg>
+                    <span>Procesar ${listMaster.length.toLocaleString()} registros</span>
+                `;
+            } else {
+                btnProcess.disabled = true;
+                btnProcess.classList.remove('bg-emerald-600', 'hover:bg-emerald-500');
+                btnProcess.classList.add('bg-gray-700');
+                btnProcess.innerHTML = `<span>Ejecutar Limpieza y Descargar</span>`;
+            }
         }
 
-        // --- LÓGICA DE CÓDIGO (LA FUNCIÓN PURA) ---
+        // --- PROCESO PRINCIPAL ---
         btnProcess.addEventListener('click', () => {
-            btnProcess.innerText = "Procesando...";
+            btnProcess.disabled = true;
+            btnProcess.innerText = "Analizando datos (esto es rápido)...";
             
+            // Timeout para dejar que la UI renderice el cambio de texto
             setTimeout(() => {
-                // 1. Normalizar emails a eliminar (Set para velocidad O(1))
-                // Convertimos a minúsculas y limpiamos espacios para asegurar coincidencias
                 const emailsToDelete = new Set();
                 
-                // Detectar columna de email en lista a borrar
-                const keyRemove = findEmailKey(listRemove[0]);
-                
-                listRemove.forEach(row => {
-                    if(row[keyRemove]) {
-                        // Limpieza agresiva: minúsculas y trim
-                        emailsToDelete.add(String(row[keyRemove]).toLowerCase().trim());
-                    }
-                });
+                // 1. Crear Índice de Eliminación (Set)
+                if(listRemove.length > 0) {
+                    const keyRemove = findEmailKey(listRemove[0]);
+                    listRemove.forEach(row => {
+                        const val = row[keyRemove];
+                        if(val) emailsToDelete.add(String(val).toLowerCase().trim());
+                    });
+                }
 
-                // 2. Filtrar lista maestra
+                // 2. Filtrar Base Maestra
+                finalCleanList = [];
+                finalRemovedList = []; // Opcional: Guardar los que se borraron
                 const keyMaster = findEmailKey(listMaster[0]);
-                const cleanList = [];
-                let deletedCount = 0;
 
                 listMaster.forEach(row => {
                     const rawEmail = row[keyMaster];
                     if(!rawEmail) return;
 
-                    const normalizedEmail = String(rawEmail).toLowerCase().trim();
+                    const normalized = String(rawEmail).toLowerCase().trim();
 
-                    // LA FUNCIÓN CORE: Si NO está en el Set, se queda.
-                    if (!emailsToDelete.has(normalizedEmail)) {
-                        cleanList.push(row);
+                    if (!emailsToDelete.has(normalized)) {
+                        finalCleanList.push(row); // Se queda
                     } else {
-                        deletedCount++;
+                        finalRemovedList.push(row); // Se va
                     }
                 });
 
-                // 3. Resultado
+                // 3. Mostrar Resultados
                 document.getElementById('resTotal').innerText = listMaster.length.toLocaleString();
-                document.getElementById('resDeleted').innerText = deletedCount.toLocaleString();
-                document.getElementById('resRemaining').innerText = cleanList.length.toLocaleString();
-                document.getElementById('resultArea').classList.remove('hidden');
+                document.getElementById('resDeleted').innerText = finalRemovedList.length.toLocaleString();
+                document.getElementById('resRemaining').innerText = finalCleanList.length.toLocaleString();
                 
-                downloadCSV(cleanList);
-                btnProcess.innerText = "Ejecutar Limpieza";
+                resultArea.classList.remove('hidden');
+                
+                // Auto-scroll hacia resultados
+                resultArea.scrollIntoView({ behavior: 'smooth' });
+                
+                btnProcess.innerText = "¡Limpieza Completada!";
+                btnProcess.classList.add('bg-gray-700');
 
             }, 100);
+        });
+
+        // --- FUNCIÓN CICLICA: USAR RESTANTES COMO MAESTRA ---
+        btnUseRemaining.addEventListener('click', () => {
+            if(finalCleanList.length === 0) return alert("No hay registros restantes para usar.");
+            
+            // 1. Promover restantes a Master
+            listMaster = [...finalCleanList]; // Copia de la lista limpia
+            
+            // 2. Actualizar UI Master
+            const countMaster = document.getElementById('countMaster');
+            countMaster.innerText = `🔄 Base en memoria: ${listMaster.length.toLocaleString()} filas (Lista Restante)`;
+            countMaster.classList.remove('text-gray-500', 'text-green-400');
+            countMaster.classList.add('text-blue-400', 'font-bold');
+            
+            // Limpiar input visualmente (aunque la data está en memoria)
+            document.getElementById('fileMaster').value = ""; 
+            
+            // 3. Limpiar lista de eliminación
+            listRemove = [];
+            document.getElementById('fileRemove').value = "";
+            const countRemove = document.getElementById('countRemove');
+            countRemove.innerText = "Esperando nuevos archivos...";
+            countRemove.classList.remove('text-green-400', 'text-blue-400');
+            countRemove.classList.add('text-gray-500');
+            
+            // 4. Resetear UI Resultados y Botón Procesar
+            resultArea.classList.add('hidden');
+            checkBtn(); // Esto deshabilitará el botón procesar hasta que subas algo nuevo
+            
+            // 5. Feedback
+            alert(`¡Listo! Ahora la Base Maestra son los ${listMaster.length.toLocaleString()} registros restantes.\n\nSube un nuevo archivo de "Resultados" para descontarlos de aquí.`);
+        });
+
+        // --- BOTONES DE DESCARGA ---
+        btnDownloadClean.addEventListener('click', () => {
+            if(finalCleanList.length) downloadCSV(finalCleanList, "LISTA_PENDIENTES_LIMPIA.csv");
+        });
+
+        btnDownloadRemoved.addEventListener('click', () => {
+            if(finalRemovedList.length) downloadCSV(finalRemovedList, "CONSOLIDADO_ELIMINADOS.csv");
+            else alert("No se eliminó ningún registro (no hubo coincidencias).");
         });
 
         // --- HELPERS ---
@@ -134,10 +272,12 @@
                 if (isExcel) {
                     const reader = new FileReader();
                     reader.onload = (e) => {
-                        const data = new Uint8Array(e.target.result);
-                        const workbook = XLSX.read(data, { type: 'array' });
-                        const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
-                        resolve(json);
+                        try {
+                            const data = new Uint8Array(e.target.result);
+                            const workbook = XLSX.read(data, { type: 'array' });
+                            const json = XLSX.utils.sheet_to_json(workbook.Sheets[workbook.SheetNames[0]], { defval: "" });
+                            resolve(json);
+                        } catch(err) { reject(err); }
                     };
                     reader.readAsArrayBuffer(file);
                 } else {
@@ -153,17 +293,16 @@
         const findEmailKey = (row) => {
             if(!row) return null;
             const keys = Object.keys(row);
-            // Busca columnas que parezcan emails
             return keys.find(k => k.toLowerCase().match(/email|correo|mail/)) || keys[0];
         };
 
-        const downloadCSV = (data) => {
+        const downloadCSV = (data, filename) => {
             const csv = Papa.unparse(data);
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
             const url = URL.createObjectURL(blob);
             const a = document.createElement('a');
             a.href = url;
-            a.download = "LISTA_LIMPIA_FINAL.csv";
+            a.download = filename;
             document.body.appendChild(a);
             a.click();
             document.body.removeChild(a);

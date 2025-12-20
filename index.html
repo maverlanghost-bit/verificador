@@ -104,16 +104,16 @@
         <div class="bg-slate-800 p-8 rounded-2xl border border-slate-700 shadow-xl">
             <h2 class="text-2xl font-bold text-white mb-2 flex items-center gap-2">
                 <svg class="w-6 h-6 text-emerald-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16v1a3 3 0 003 3h10a3 3 0 003-3v-1m-4-8l-4-4m0 0L8 8m4-4v12"></path></svg>
-                Subir Archivos Verificados
+                Subir Archivos Verificados (Resultados)
             </h2>
-            <p class="text-slate-400 mb-6">Sube tus archivos Excel o CSV con los resultados. El sistema buscará los emails y actualizará su estado. Puedes subir varios archivos uno tras otro.</p>
+            <p class="text-slate-400 mb-6">Sube tus archivos Excel o CSV con los resultados de Million Verifier. El sistema actualizará el estado de los correos.</p>
             
             <input type="file" id="upload-input" accept=".csv, .xlsx, .xls" class="hidden">
             <label for="upload-input" id="upload-zone" class="flex flex-col items-center justify-center w-full h-48 border-2 border-slate-600 border-dashed rounded-xl cursor-pointer bg-slate-900 hover:bg-slate-800 hover:border-blue-500 transition-all group">
                 <div class="flex flex-col items-center justify-center pt-5 pb-6">
                     <svg class="w-12 h-12 mb-4 text-slate-500 group-hover:text-blue-400 transition-colors" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 16a4 4 0 01-.88-7.903A5 5 0 1115.9 6L16 6a5 5 0 011 9.9M15 13l-3-3m0 0l-3 3m3-3v12"></path></svg>
-                    <p class="mb-2 text-sm text-slate-400"><span class="font-semibold text-white">Haz clic para subir</span> o arrastra el archivo aquí</p>
-                    <p class="text-xs text-slate-500">Soporta Excel (.xlsx) y CSV</p>
+                    <p class="mb-2 text-sm text-slate-400"><span class="font-semibold text-white">Clic para subir resultados</span></p>
+                    <p class="text-xs text-slate-500">Soporta Excel y CSV</p>
                 </div>
             </label>
         </div>
@@ -129,12 +129,10 @@
                 </h3>
                 <div class="space-y-3">
                     <button id="btn-download-full" class="w-full flex items-center justify-between px-4 py-3 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-200 transition group border border-slate-700">
-                        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-slate-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Reporte Completo (Con estado)</span>
-                        <span class="text-xs bg-slate-700 px-2 py-1 rounded text-slate-400 group-hover:bg-slate-600">CSV</span>
+                        <span class="flex items-center gap-2"><svg class="w-4 h-4 text-slate-500 group-hover:text-white" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M9 17v-2m3 2v-4m3 4v-6m2 10H7a2 2 0 01-2-2V5a2 2 0 012-2h5.586a1 1 0 01.707.293l5.414 5.414a1 1 0 01.293.707V19a2 2 0 01-2 2z"/></svg> Reporte Completo (Todo)</span>
                     </button>
                     <button id="btn-download-clean" class="w-full flex items-center justify-between px-4 py-3 bg-emerald-900/20 hover:bg-emerald-900/40 rounded-lg text-emerald-400 transition border border-emerald-900/30">
-                        <span class="flex items-center gap-2"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Descargar Solo Emails (Lista para usar)</span>
-                        <span class="text-xs bg-emerald-900/50 px-2 py-1 rounded">CSV</span>
+                        <span class="flex items-center gap-2"><svg class="w-4 h-4" fill="none" viewBox="0 0 24 24" stroke="currentColor"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M5 13l4 4L19 7"/></svg> Descargar Solo Emails Verificados</span>
                     </button>
                 </div>
             </div>
@@ -143,7 +141,7 @@
             <div class="bg-slate-900 p-6 rounded-2xl border border-slate-800">
                 <h3 class="text-lg font-bold text-white mb-4 flex items-center gap-2">
                     <svg class="w-5 h-5 text-amber-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
-                    Gestión de Base de Datos
+                    Gestión de Base Maestra
                 </h3>
                 <div class="space-y-3">
                     <button id="btn-download-pending" class="w-full flex items-center justify-between px-4 py-3 bg-slate-800 hover:bg-slate-700 rounded-lg text-slate-300 transition border border-slate-700">
@@ -152,20 +150,29 @@
                     
                     <div class="pt-4 mt-2 border-t border-slate-800">
                          <input type="file" id="initial-upload-input" accept=".csv, .xlsx, .xls" class="hidden">
-                        <label for="initial-upload-input" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-slate-800/50 hover:bg-slate-700 text-xs text-slate-500 hover:text-slate-300 rounded border border-slate-800 cursor-pointer transition">
-                            Subir Nueva Base Maestra (Reinicia Todo)
+                        <label for="initial-upload-input" class="flex items-center justify-center gap-2 w-full px-4 py-2 bg-slate-800/50 hover:bg-slate-700 text-xs text-slate-500 hover:text-slate-300 rounded border border-slate-800 cursor-pointer transition text-center">
+                            Subir Nueva Base Maestra (Carga Masiva)
                         </label>
                     </div>
                 </div>
             </div>
         </div>
 
-        <!-- MENSAJE DE ESTADO / CARGA -->
-        <div id="loading-msg" class="hidden-forcibly fixed bottom-8 right-8 bg-slate-800 p-6 rounded-xl shadow-2xl flex items-center gap-4 border border-slate-700 animate-bounce-in z-50">
-            <svg class="w-8 h-8 text-blue-400 animate-spin" fill="none" viewBox="0 0 24 24"><circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle><path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path></svg>
-            <div>
-                <p class="text-white font-bold text-lg">Procesando...</p>
-                <p id="loading-text" class="text-blue-300 text-sm">Por favor espera</p>
+        <!-- MENSAJE DE CARGA MEJORADO -->
+        <div id="loading-msg" class="hidden-forcibly fixed inset-0 bg-slate-950/80 backdrop-blur-sm z-50 flex items-center justify-center fade-in">
+            <div class="bg-slate-800 p-8 rounded-2xl shadow-2xl flex flex-col items-center gap-6 max-w-sm w-full border border-slate-700">
+                <div class="relative w-16 h-16">
+                     <div class="absolute inset-0 border-4 border-slate-600 rounded-full"></div>
+                     <div class="absolute inset-0 border-4 border-blue-500 rounded-full border-t-transparent animate-spin"></div>
+                </div>
+                <div class="text-center">
+                    <p class="text-white font-bold text-xl mb-1">Trabajando...</p>
+                    <p id="loading-text" class="text-blue-300 text-sm font-mono">Iniciando procesos</p>
+                </div>
+                <!-- Barra de progreso interna -->
+                <div class="w-full bg-slate-700 rounded-full h-2">
+                     <div id="upload-progress-bar" class="bg-blue-500 h-2 rounded-full transition-all duration-200" style="width: 0%"></div>
+                </div>
             </div>
         </div>
 
@@ -177,7 +184,6 @@
         import { getAuth, signInAnonymously, onAuthStateChanged, signInWithCustomToken } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-auth.js';
         import { getFirestore, collection, doc, onSnapshot, writeBatch, query, where, getDocs, updateDoc, serverTimestamp, setDoc, getDoc, getCountFromServer } from 'https://www.gstatic.com/firebasejs/10.7.1/firebase-firestore.js';
 
-        // --- CONFIGURACIÓN DE PRODUCCIÓN ---
         const firebaseConfig = {
             apiKey: "AIzaSyD8LhEUAPs0diKJi2aRYV-Qwtcdr8hd6ao",
             authDomain: "verificador-c4a60.firebaseapp.com",
@@ -191,7 +197,6 @@
         const auth = getAuth(app);
         const db = getFirestore(app);
         const COLLECTION_PATH = 'emails';
-        // (Ya no usamos SYSTEM_PATH/semáforos)
 
         // Elementos DOM
         const loginView = document.getElementById('login-view');
@@ -200,6 +205,7 @@
         const errorMsg = document.getElementById('error-msg');
         const loadingMsg = document.getElementById('loading-msg');
         const loadingText = document.getElementById('loading-text');
+        const uploadProgressBar = document.getElementById('upload-progress-bar');
 
         // Contadores
         const totalCountEl = document.getElementById('total-count');
@@ -208,9 +214,7 @@
         const progressBar = document.getElementById('progress-bar');
         const progressText = document.getElementById('progress-percent-text');
 
-        // Estado
         let username = "";
-        let isLoading = false;
         let stats = { total: 0, verified: 0 };
 
         // --- HELPER: LEER EXCEL/CSV ---
@@ -239,38 +243,27 @@
             });
         };
 
-        function setLoading(loading, text = "Cargando...") {
-            isLoading = loading;
+        function setLoading(loading, text = "Cargando...", percent = 0) {
             if (loading) {
                 loadingMsg.classList.remove('hidden-forcibly');
-                loadingText.textContent = text;
+                loadingText.innerText = text;
+                uploadProgressBar.style.width = `${percent}%`;
             } else {
                 loadingMsg.classList.add('hidden-forcibly');
             }
         }
 
-        // --- METRICAS EN TIEMPO REAL ---
-        // Nota: Con 60k documentos, contar todo el tiempo es costoso.
-        // Haremos un snapshot de conteo optimizado al cargar y luego listener simple si es posible,
-        // o mantendremos un documento de contadores si la base crece mucho.
-        // Para este caso, haremos consultas de conteo al cargar archivos.
         async function refreshStats() {
             try {
-                // Obtenemos conteos aproximados
-                // Total
                 const coll = collection(db, COLLECTION_PATH);
                 const snapTotal = await getCountFromServer(query(coll));
                 const total = snapTotal.data().count;
-
-                // Verificados
                 const snapVerified = await getCountFromServer(query(coll, where("status", "==", "verified")));
                 const verified = snapVerified.data().count;
 
                 stats = { total, verified };
                 updateUIStats();
-            } catch (e) {
-                console.error("Error stats", e);
-            }
+            } catch (e) { console.error("Error stats", e); }
         }
 
         function updateUIStats() {
@@ -295,12 +288,8 @@
                 }
                 loginView.classList.add('hidden-forcibly');
                 dashboardView.classList.remove('hidden-forcibly');
-                
-                // Cargar estadísticas iniciales
                 refreshStats();
-                // Refrescar cada 30 segundos autom
                 setInterval(refreshStats, 30000);
-
             } catch (e) {
                 if (e.code === 'auth/unauthorized-domain' || e.message.includes('unauthorized-domain')) {
                     alert("ERROR DE DOMINIO: Debes autorizar este dominio en Firebase Console.");
@@ -311,63 +300,83 @@
             }
         });
 
-        // --- 1. SUBIR RESULTADOS (Múltiples Archivos) ---
-        document.getElementById('upload-input').addEventListener('change', async (e) => {
+        // --- CARGA INICIAL (BASE MAESTRA 63k+) ---
+        document.getElementById('initial-upload-input').addEventListener('change', async (e) => {
             const file = e.target.files[0];
             if(!file) return;
             
-            setLoading(true, "Leyendo archivo...");
-            
+            if(!confirm("¿Estás seguro? Esto cargará nuevos correos a la base de datos.")) return;
+
+            setLoading(true, "Analizando archivo...", 0);
             try {
                 const rows = await parseFile(file);
-                if(!rows.length) { setLoading(false); return alert("Archivo vacío"); }
-
-                // Detectar columna resultado
-                const keys = Object.keys(rows[0]);
-                const resKey = keys.find(k => k.toLowerCase().match(/result|status|verif/));
-
-                if(!resKey) {
-                    setLoading(false); 
-                    return alert("No encontré columna de 'resultado' o 'status'. Asegúrate que el Excel tenga cabeceras.");
-                }
-
-                // Subir
-                const batchSize = 250;
-                let processed = 0;
+                const batchSize = 400; // Lotes de 400
                 
                 for(let i=0; i<rows.length; i+=batchSize) {
-                    await new Promise(r => setTimeout(r, 50)); // UI Breath
-                    setLoading(true, `Actualizando ${i} de ${rows.length} registros...`);
+                    // PAUSA CRÍTICA para que el navegador respire
+                    await new Promise(r => setTimeout(r, 100));
+
+                    const progress = Math.round((i / rows.length) * 100);
+                    setLoading(true, `Subiendo ${i} de ${rows.length}...`, progress);
                     
                     const chunk = rows.slice(i, i+batchSize);
                     const batch = writeBatch(db);
                     
                     chunk.forEach(row => {
-                        const email = row.email || row.Email || row.EMAIL; // Flexibilidad
-                        const res = row[resKey];
+                        const email = row.email || row.Email || row.EMAIL;
                         if(email) {
                             const docId = btoa(email).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
+                            // Set merge:true para no sobrescribir si ya existe
                             const ref = doc(db, COLLECTION_PATH, docId);
-                            // Actualizamos status y guardamos el resultado exacto que trajo el archivo
-                            batch.update(ref, {
-                                status: 'verified',
-                                result: res || "Procesado", // Si viene vacío, ponemos procesado
-                                verifiedAt: serverTimestamp()
-                            });
+                            batch.set(ref, {
+                                email: email, 
+                                status: 'pending', // Por defecto pendiente si es nuevo
+                                result: null
+                            }, { merge: true }); 
                         }
                     });
+                    await batch.commit();
+                }
+                alert("Base maestra cargada exitosamente.");
+                refreshStats();
+            } catch(err) { alert("Error: " + err.message); }
+            setLoading(false);
+        });
+
+        // --- SUBIR RESULTADOS ---
+        document.getElementById('upload-input').addEventListener('change', async (e) => {
+            const file = e.target.files[0];
+            if(!file) return;
+            
+            setLoading(true, "Leyendo resultados...", 0);
+            
+            try {
+                const rows = await parseFile(file);
+                if(!rows.length) { setLoading(false); return alert("Archivo vacío"); }
+
+                const keys = Object.keys(rows[0]);
+                const resKey = keys.find(k => k.toLowerCase().match(/result|status|verif/));
+
+                if(!resKey) {
+                    setLoading(false); 
+                    return alert("No encontré columna de resultado.");
+                }
+
+                const batchSize = 400;
+                
+                for(let i=0; i<rows.length; i+=batchSize) {
+                    await new Promise(r => setTimeout(r, 100));
                     
-                    // Usamos update, si el doc no existe (el email no estaba en la base maestra), fallará ese update.
-                    // Para robustez, idealmente sería set con merge, pero update es correcto si asumimos base maestra cargada.
-                    // Si queremos permitir que resultados agreguen nuevos emails, cambiar a:
-                    // batch.set(ref, { ...data }, { merge: true });
-                    // Haremos set con merge para que NO falle si subes un email que no estaba.
+                    const progress = Math.round((i / rows.length) * 100);
+                    setLoading(true, `Actualizando ${i} de ${rows.length}...`, progress);
                     
-                    // CORRECCION: Usar set merge
+                    const chunk = rows.slice(i, i+batchSize);
+                    const batch = writeBatch(db);
+                    
                     chunk.forEach(row => {
-                         const email = row.email || row.Email || row.EMAIL;
-                         const res = row[resKey];
-                         if(email) {
+                        const email = row.email || row.Email || row.EMAIL;
+                        const res = row[resKey];
+                        if(email) {
                             const docId = btoa(email).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
                             const ref = doc(db, COLLECTION_PATH, docId);
                             batch.set(ref, {
@@ -376,14 +385,14 @@
                                 result: res || "Procesado",
                                 verifiedAt: serverTimestamp()
                             }, { merge: true });
-                         }
+                        }
                     });
 
                     await batch.commit();
                 }
 
-                alert("¡Archivo procesado correctamente!");
-                document.getElementById('upload-input').value = ""; // Limpiar input para poder subir el mismo si se quiere
+                alert("Resultados actualizados.");
+                document.getElementById('upload-input').value = "";
                 refreshStats();
 
             } catch (err) {
@@ -392,103 +401,52 @@
             setLoading(false);
         });
 
-        // --- 2. DESCARGAS ---
-        
-        // Reporte Completo
+        // --- DESCARGAS ---
         document.getElementById('btn-download-full').addEventListener('click', async () => {
-            setLoading(true, "Generando reporte completo...");
+            setLoading(true, "Generando reporte...", 100);
             try {
-                const q = query(collection(db, COLLECTION_PATH), where("status", "==", "verified"));
-                const snap = await getDocs(q);
+                const q = query(collection(db, COLLECTION_PATH));
+                const snap = await getDocs(q); // Cuidado: Descargar 60k docs consume ancho de banda
                 const data = [];
                 snap.forEach(d => {
                     const r = d.data();
-                    data.push({ email: r.email, resultado: r.result, fecha: r.verifiedAt ? r.verifiedAt.toDate().toISOString() : '' });
+                    data.push({ email: r.email, estado: r.status, resultado: r.result || "" });
                 });
-
-                if(data.length) downloadCSV(data, "REPORTE_COMPLETO_VERIFICADOS.csv");
-                else alert("No hay emails verificados aún.");
+                if(data.length) downloadCSV(data, "BASE_COMPLETA.csv");
+                else alert("Base vacía.");
             } catch(e) { console.error(e); alert("Error descargando"); }
             setLoading(false);
         });
 
-        // Reporte Limpio (Solo lista de emails)
         document.getElementById('btn-download-clean').addEventListener('click', async () => {
-            setLoading(true, "Generando lista limpia...");
+            setLoading(true, "Filtrando verificados...", 100);
             try {
-                // Descargamos todo lo verificado
                 const q = query(collection(db, COLLECTION_PATH), where("status", "==", "verified"));
                 const snap = await getDocs(q);
                 const data = [];
                 snap.forEach(d => {
                      const r = d.data();
-                     // AQUÍ: Puedes agregar lógica para filtrar si 'result' es "Bounced"
-                     // Por ahora descargamos todos los que tienen status verificado.
                      data.push({ email: r.email, resultado: r.result }); 
                 });
-                
-                if(data.length) downloadCSV(data, "LISTA_EMAILS_PROCESADOS.csv");
-                else alert("Nada por descargar.");
+                if(data.length) downloadCSV(data, "SOLO_VERIFICADOS.csv");
+                else alert("No hay verificados.");
             } catch(e) { console.error(e); alert("Error descargando"); }
             setLoading(false);
         });
 
-        // Reporte Pendientes
         document.getElementById('btn-download-pending').addEventListener('click', async () => {
-            setLoading(true, "Buscando pendientes...");
+            setLoading(true, "Buscando pendientes...", 100);
             try {
                 const q = query(collection(db, COLLECTION_PATH), where("status", "==", "pending"));
                 const snap = await getDocs(q);
                 const data = [];
                 snap.forEach(d => data.push({ email: d.data().email }));
-                
-                if(data.length) downloadCSV(data, "EMAILS_PENDIENTES.csv");
-                else alert("¡Felicidades! No hay pendientes.");
+                if(data.length) downloadCSV(data, "PENDIENTES_PARA_PROCESAR.csv");
+                else alert("No quedan pendientes.");
             } catch(e) { console.error(e); alert("Error descargando"); }
             setLoading(false);
         });
 
-        // Carga Base Maestra
-        document.getElementById('initial-upload-input').addEventListener('change', async (e) => {
-             const file = e.target.files[0];
-            if(!file) return;
-            
-            if(!confirm("¿Estás seguro? Esto cargará nuevos correos a la base de datos.")) return;
-
-            setLoading(true, "Cargando base maestra...");
-            try {
-                const rows = await parseFile(file);
-                const batchSize = 250;
-                for(let i=0; i<rows.length; i+=batchSize) {
-                    await new Promise(r => setTimeout(r, 50));
-                    setLoading(true, `Insertando ${i} de ${rows.length}...`);
-                    const chunk = rows.slice(i, i+batchSize);
-                    const batch = writeBatch(db);
-                    chunk.forEach(row => {
-                        const email = row.email || row.Email || row.EMAIL;
-                        if(email) {
-                            const docId = btoa(email).replace(/\//g, '_').replace(/\+/g, '-').replace(/=/g, '');
-                            // Set con merge:true para no borrar si ya existía y estaba verificado
-                            const ref = doc(db, COLLECTION_PATH, docId);
-                            // Solo seteamos 'pending' si no existe. 
-                            // Firestore no tiene "create if not exists" nativo en batch simple sin leer.
-                            // Estrategia: Setear status='pending' SOLO si no queremos preservar el estado anterior.
-                            // Si queremos preservar, mejor usar una lógica diferente.
-                            // Para simplificar: Sobrescribimos como pendiente (asumimos es base nueva).
-                            batch.set(ref, {
-                                email: email, status: 'pending', result: null
-                            });
-                        }
-                    });
-                    await batch.commit();
-                }
-                alert("Carga completada.");
-                refreshStats();
-            } catch(err) { alert("Error: " + err.message); }
-            setLoading(false);
-        });
-
-        // Helper descarga
         const downloadCSV = (data, filename) => {
             const csv = Papa.unparse(data);
             const blob = new Blob([csv], { type: 'text/csv;charset=utf-8;' });
